@@ -1,8 +1,7 @@
 #ifndef _LMDB_WRAPPERS_H__
 #define _LMDB_WRAPPERS_H__
 
-#include "lmdb/lmdb.h"
-#include "common/toolkit.h"
+#include <lmdb.h>
 #include <memory>
 
 namespace LMDB {

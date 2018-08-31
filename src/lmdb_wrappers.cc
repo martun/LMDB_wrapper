@@ -1,17 +1,16 @@
 #include "lmdb_wrappers.h"
-#include "common/toolkit.h"
- 
+#include <lmdb.h>
+
 namespace LMDB {
 
 // Throws a proper exception if rc contains an LMDB error.
 void throw_if_error(int rc, std::string additional_info) {
-  // TODO(martun): Write the exception handling once we create our own exceptions.
   if (rc != MDB_SUCCESS) {
-    GDBE_THROW("LMDB failure: %s. [%s]", mdb_strerror(rc), additional_info);
+//    GDBE_THROW("LMDB failure: %s. [%s]", mdb_strerror(rc), additional_info);
   }
 }
 
-LMDBEnv::LMDBEnv(MDB_env* env) 
+LMDBEnv::LMDBEnv(MDB_env* env)
     :env_(env) {
 
 }

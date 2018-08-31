@@ -4,9 +4,6 @@
 
 #include <memory>
 #include <cstring>
-#include "common/common.h"
-#include "bitmap_index/index_utils.h"
-#include "value_decomposer.h"
 
 namespace LMDB {
 
@@ -23,11 +20,11 @@ public:
   virtual void from_byte_array(uint32_t size, const char* buffer) = 0;
 };
 
-// Used to store offset ranges. Serves as a sample of class to be stored in LMDB.
-class OffsetRange : public LMDBType {
+// Serves as a sample of key class to be stored in LMDB.
+class SampleKey : public LMDBType {
 public:
-  OffsetRange() = default;
-  OffsetRange(uint32_t start_offset, uint32_t end_offset);
+  SampleKey() = default;
+  SampleKey(uint32_t key);
 
   // Returns byte length of the current element.
   uint32_t byte_length() const override;
@@ -38,8 +35,30 @@ public:
   // Reads the value from the byte array.
   void from_byte_array(uint32_t size, const char* buffer) override;
 
-  uint32_t start_offset;
-  uint32_t end_offset;
+  bool operator==(const SampleKey& other) const;
+
+  uint32_t key_;
+};
+
+// Serves as a sample of value class to be stored in LMDB.
+class SampleValue : public LMDBType {
+public:
+    SampleValue() = default;
+    SampleValue(uint32_t value1, uint32_t value2);
+
+    // Returns byte length of the current element.
+    uint32_t byte_length() const override;
+
+    // Writes current value into a pre-allocated byte array.
+    void to_byte_array(char* buffer) const override;
+
+    // Reads the value from the byte array.
+    void from_byte_array(uint32_t size, const char* buffer) override;
+
+    bool operator==(const SampleValue& other) const;
+
+    uint32_t value1_;
+    uint32_t value2_;
 };
 
 } // namespace LMDB

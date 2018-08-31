@@ -1,8 +1,7 @@
 #include "lmdb_dictionary.h"
-#include "lmdb/lmdb.h"
-#include <boost/filesystem/operations.hpp>
+#include <lmdb.h>
 #include <boost/filesystem/path.hpp>
-#include <common/toolkit.h>
+#include <boost/filesystem/operations.hpp>
 
 namespace LMDB {
 
@@ -121,9 +120,6 @@ LMDBDictionary<Key, Value>::LMDBDictionary(
 
   MDB_env *env_ptr;
   throw_if_error_dict(mdb_env_create(&env_ptr), "function: creating environment");
-  //GDBE_LOG_INFO("Setting LMDB map size to %llu for database at %s",
-  //    map_size,
-  //    file_path);
 
   throw_if_error_dict(mdb_env_set_mapsize(env_ptr, map_size), "function: setting map size");
   
@@ -177,12 +173,7 @@ typename LMDBDictionary<Key, Value>::const_iterator LMDBDictionary<Key, Value>::
 template <class Key, class Value>
 void LMDBDictionary<Key, Value>::insert(
     const Key& key, const Value& value, std::shared_ptr<LMDBTxn<Key, Value>> txn) {
-  GDBE_PROF_SCOPE(
-    "%s<%s, %s>", 
-    GDBE_PROF_SHORTEN(__PRETTY_FUNCTION__), 
-    std::string(typeid(Key).name()), 
-    std::string(typeid(Value).name()));
- 
+
   // Convert key and value to MDB.
   MDB_val mdb_key, mdb_value;
   mdb_key.mv_size = key.byte_length();
@@ -201,15 +192,8 @@ template <class Key, class Value>
 void LMDBDictionary<Key, Value>::insert(
     const std::vector<std::pair<Key, Value>>& values,
     std::shared_ptr<LMDBTxn<Key, Value>> txn) {
-  //GDBE_LOG_INFO(
-  //  "Adding %d values into LMDB database for attribute value mapping", 
-  //  values.size());
-
-  GDBE_PROF_SCOPE(
-    "%s<%s, %s>", 
-    GDBE_PROF_SHORTEN(__PRETTY_FUNCTION__), 
     std::string(typeid(Key).name()), 
-    std::string(typeid(Value).name()));
+    std::string(typeid(Value).name());
  
   // Convert values to MDB values.
   MDB_val mdb_key, mdb_value;
@@ -241,11 +225,8 @@ void LMDBDictionary<Key, Value>::insert(
 template <class Key, class Value>
 typename LMDBDictionary<Key, Value>::const_iterator 
 LMDBDictionary<Key, Value>::find(const Key& key, std::shared_ptr<LMDBTxn<Key, Value>> txn) {
-  GDBE_PROF_SCOPE(
-    "%s<%s, %s>", 
-    GDBE_PROF_SHORTEN(__PRETTY_FUNCTION__), 
     std::string(typeid(Key).name()), 
-    std::string(typeid(Value).name()));
+    std::string(typeid(Value).name());
 
   MDB_cursor *cursor;
   throw_if_error_dict(mdb_cursor_open(txn->get(), txn->get_dbi(), &cursor), "function: find");
@@ -275,11 +256,8 @@ LMDBDictionary<Key, Value>::find(const Key& key, std::shared_ptr<LMDBTxn<Key, Va
 template <class Key, class Value>
 typename LMDBDictionary<Key, Value>::const_iterator 
 LMDBDictionary<Key, Value>::lower_bound(const Key& key, std::shared_ptr<LMDBTxn<Key, Value>> txn) {
-  GDBE_PROF_SCOPE(
-    "%s<%s, %s>", 
-    GDBE_PROF_SHORTEN(__PRETTY_FUNCTION__), 
     std::string(typeid(Key).name()), 
-    std::string(typeid(Value).name()));
+    std::string(typeid(Value).name());
  
   MDB_cursor *cursor;
   throw_if_error_dict(mdb_cursor_open(txn->get(), txn->get_dbi(), &cursor), "function: lower_bound, openning cursor");
@@ -337,11 +315,8 @@ LMDBDictionary<Key, Value>::~LMDBDictionary() {
 
 template <class Key, class Value>
 std::shared_ptr<LMDBTxn<Key, Value>> LMDBDictionary<Key, Value>::new_txn() {
-  GDBE_PROF_SCOPE(
-    "%s<%s, %s>", 
-    GDBE_PROF_SHORTEN(__PRETTY_FUNCTION__), 
     std::string(typeid(Key).name()), 
-    std::string(typeid(Value).name()));
+    std::string(typeid(Value).name());
   return std::make_shared<LMDBTxn<Key, Value>>(this, env_, flags_);
 }
 
