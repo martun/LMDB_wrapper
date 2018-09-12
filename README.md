@@ -1,5 +1,5 @@
 ## LMDB C++ Wrapper
-C++ style LMDB database wrapper, which makes usage of LMDB very similiar to usage of std::map, I.E. you have iterators and so on. Makes it very easy for you to change and code that uses std::map to use LMDB instead. 
+C++ style LMDB database wrapper, which makes usage of LMDB very similiar to usage of std::map, I.E. you have iterators and so on. Makes it very easy for you to change and code that uses std::map to use LMDB instead. Sample usage can be found in src/tests/test.cpp.
 
 ## Building
 Build project:
